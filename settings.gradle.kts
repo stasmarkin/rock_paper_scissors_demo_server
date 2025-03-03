@@ -1,0 +1,1 @@
+rootProject.name = "rock_paper_scissors_demo_server"
