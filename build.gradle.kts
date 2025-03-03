@@ -30,4 +30,38 @@ dependencies {
 
 application {
     mainClass.set("me.stasmarkin.rockpaperscissors.MainKt")
-} 
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "me.stasmarkin.rockpaperscissors.MainKt"
+    }
+    
+    // This ensures that all dependencies are included in the jar
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith("jar") }
+            .map { zipTree(it) }
+    })
+}
+
+// Add stress test task
+tasks.register<JavaExec>("stressTest") {
+    group = "application"
+    description = "Run the stress test simulation"
+    
+    classpath = sourceSets["test"].runtimeClasspath
+    mainClass.set("me.stasmarkin.rockpaperscissors.StressTestKt")
+    
+    jvmArgs = listOf(
+        "-Xms512m",                        // Initial heap size
+        "-Xmx2g",                          // Maximum heap size
+        "-XX:+UseG1GC",                    // Use G1 Garbage Collector
+        "-Dio.netty.leakDetection.level=disabled", // Disable Netty leak detection
+        "-Djava.net.preferIPv4Stack=true"  // Use IPv4 instead of IPv6
+    )
+    
+}

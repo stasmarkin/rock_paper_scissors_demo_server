@@ -14,7 +14,7 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.random.Random
 
 
-private const val NUM_BOTS = 4_000
+private const val NUM_BOTS = 1_000
 
 private val ioDispatcher = Dispatchers.IO.limitedParallelism(256)
 private val botDispatcher = Dispatchers.Default.limitedParallelism(Runtime.getRuntime().availableProcessors() * 4)

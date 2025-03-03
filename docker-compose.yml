@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  rock_paper_scissors_demo_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: rock-paper-scissors-demo-server
+    restart: unless-stopped
+    environment:
+      - JVM_OPTS=-Xmx512m
